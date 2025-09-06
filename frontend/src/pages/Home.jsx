@@ -8,8 +8,7 @@ function Home() {
 
     const [searchQuery, setSearchQuery] = useState("");
     // const [filteredMovies, setFilteredMovies] = useState([]);
-
-
+    
     //Storing movies in state to re-render on update
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);

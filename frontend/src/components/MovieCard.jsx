@@ -1,9 +1,17 @@
 import "../css/MovieCard.css";
+import {useMovies} from '../contexts/MovieContext.jsx'
 
 function MovieCard({movie}){
+    const {favorites, addToFavorites, removeFromFavorites, isFavorite} = useMovies();
+    const favorite = isFavorite(movie.id); // This line remains unchanged
     
-    function onfavoriteClick(){
-        console.log("favorite clicked")
+    function onfavoriteClick(e){
+        e.preventDefault();
+        if(favorite){
+            removeFromFavorites(movie.id);
+        } else {
+            addToFavorites(movie);
+        }
     }
 
     // TheMovieDB poster base URL
@@ -16,7 +24,11 @@ function MovieCard({movie}){
             <div className="movie-poster">
                 <img src={posterUrl} alt={movie.title} />
                 <div className="movie-overlay">
-                    <button className="favorite-btn" onClick={onfavoriteClick}>
+                    <button
+                        className={`favorite-btn${favorite ? " active" : ""}`}
+                        onClick={onfavoriteClick}
+                        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+                    >
                         ❤️
                     </button>
                 </div>
@@ -29,5 +41,4 @@ function MovieCard({movie}){
     );
 }
 
-//export default MovieCard
-export default MovieCard
+export default MovieCard;
