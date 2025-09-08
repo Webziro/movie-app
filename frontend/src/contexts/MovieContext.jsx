@@ -26,12 +26,20 @@ export const MovieProvider = ({ children }) => {
     //Add and remove from favorite
     const addToFavorites = (movie) => {
         if (!favorites.find((fav) => fav.id === movie.id)) {
-            setFavorites([...favorites, movie]);
-        }
+            setFavorites(prev => {
+                const updated = [...prev, movie];
+                console.log('Added to favorites:', updated);
+                return updated;
+            });
+    }
     }
 
     const removeFromFavorites = (movieId) => {
-        setFavorites(favorites.filter((fav) => fav.id !== movieId));
+        setFavorites(prev => {
+            const updated = prev.filter((fav) => fav.id !== movieId);
+            console.log('Removed from favorites:', updated);
+            return updated;
+        });
     }
 
     const  isFavorite = (movieId) => {
