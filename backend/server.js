@@ -1,0 +1,126 @@
+const express = require('express')
+const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+require('dotenv').config()
+const jwtSecret = process.env.JWT_SECRET
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/movie_db', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+
+// Models
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: { type: String, unique: true },
+  password_hash: String
+})
+const User = mongoose.model('User', UserSchema)
+
+const SubscriptionSchema = new mongoose.Schema({
+  user_id: mongoose.Schema.Types.ObjectId,
+  plan: String,
+  status: String,
+  start_date: Date,
+  end_date: Date
+})
+const Subscription = mongoose.model('Subscription', SubscriptionSchema)
+
+const ContactSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String,
+  created_at: { type: Date, default: Date.now }
+})
+const Contact = mongoose.model('Contact', ContactSchema)
+
+const app = express()
+app.use(cors())
+app.use(bodyParser.json())
+
+// Register
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body
+  const existingUser = await User.findOne({ email })
+  if (existingUser) return res.status(400).json({ message: 'Email already registered' })
+
+  const password_hash = await bcrypt.hash(password, 10)
+  const user = new User({ name, email, password_hash })
+  await user.save()
+  res.json({ message: 'User registered successfully', userId: user._id })
+
+  await user.save().then((
+
+  ) => console.log('User saved to DB')).catch(err => console.error('Save error:', err))
+
+})
+
+// Login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body
+  const user = await User.findOne({ email })
+  if (!user) return res.status(400).json({ message: 'Invalid credentials' })
+
+  const valid = await bcrypt.compare(password, user.password_hash)
+  if (!valid) return res.status(400).json({ message: 'Invalid credentials' })
+
+  const jwtSecret = process.env.JWT_SECRET
+  const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' })
+  res.json({ token, message: 'Login successful' })
+})
+
+// Auth middleware 
+const auth = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')
+  if (!token) return res.status(401).json({ message: 'Missing token' })
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret);
+    req.userId = decoded.userId
+    next()
+  } catch {
+    res.status(401).json({ message: 'Invalid token' })
+  }
+}
+
+// Subscribe
+app.post('/subscribe', auth, async (req, res) => {
+  try {
+    const { plan } = req.body
+    const start_date = new Date()
+    const end_date = new Date()
+    end_date.setFullYear(end_date.getFullYear() + 1)
+
+    const subscription = new Subscription({
+      user_id: req.userId,
+      plan,
+      status: 'active',
+      start_date,
+      end_date
+    })
+    await subscription.save()
+    res.json({
+      message: 'Subscription activated',
+      status: subscription.status,
+      start_date: start_date.toISOString().split('T'),
+      end_date: end_date.toISOString().split('T')
+    })
+  } catch (err) {
+    console.error('Subscribe error:', err)
+    res.status(500).json({ message: 'Subscription failed' })
+  }
+})
+
+// Contact
+app.post('/contact', async (req, res) => {
+  const { name, email, message } = req.body
+  const contact = new Contact({ name, email, message })
+  await contact.save()
+  res.json({ message: 'Contact request received, we will get back to you soon.' })
+})
+
+app.listen(3000, () => console.log('Server running on port 3000'))
