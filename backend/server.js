@@ -95,7 +95,7 @@ app.post('/login', async (req, res) => {
 
 // Auth middleware 
 const auth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')
+  const token = req.headers.authorization?.split(' ')[1]
   if (!token) return res.status(401).json({ message: 'Missing token' })
 
   try {
@@ -106,6 +106,23 @@ const auth = (req, res, next) => {
     res.status(401).json({ message: 'Invalid token' })
   }
 }
+
+// Get user data
+app.get('/user', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('-password_hash')
+    if (!user) return res.status(404).json({ message: 'User not found' })
+    
+    res.json({ 
+      name: user.name, 
+      email: user.email,
+      id: user._id 
+    })
+  } catch (err) {
+    console.error('Get user error:', err)
+    res.status(500).json({ message: 'Failed to get user data' })
+  }
+})
 
 // Subscribe
 app.post('/subscribe', auth, async (req, res) => {

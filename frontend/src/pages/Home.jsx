@@ -17,10 +17,58 @@ function Home() {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [userName, setUserName] = useState("");
+    const [userLoading, setUserLoading] = useState(true);
+
+    // Function to get time-based greeting
+    const getTimeBasedGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "Good Morning";
+        if (hour < 18) return "Good Afternoon";
+        return "Good Evening";
+    };
+
+    // Function to fetch user data
+    const fetchUserData = async () => {
+        if (!token) {
+            setUserLoading(false);
+            return;
+        }
+        
+        try {
+            console.log('Fetching user data with token:', token);
+            const res = await fetch('http://localhost:3000/user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log('User API response status:', res.status);
+            
+            if (res.ok) {
+                const userData = await res.json();
+                console.log('User data received:', userData);
+                setUserName(userData.name || "User");
+            } else {
+                const errorData = await res.json();
+                console.error('API error:', errorData);
+                setUserName("User");
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setUserName("User"); // Fallback name
+        } finally {
+            setUserLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!token) {
             navigate('/login', { replace: true });
+        } else {
+            fetchUserData();
         }
     }, [token, navigate]);
     
@@ -78,6 +126,13 @@ function Home() {
     }
     return (
         <div className="home">
+            <div className="welcome-message">
+                <h1>
+                    {getTimeBasedGreeting()}, {userLoading ? "..." : userName}!
+                </h1>
+                <p>Discover amazing movies and add them to your favorites.</p>
+            </div>
+            
             <form onSubmit={handleSearch} className="search-form">
                 <input type="text" placeholder="Search Movie..." 
                     className="search-input"

@@ -4,6 +4,37 @@
   box-sizing: border-box;
 }
 
+.welcome-message {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.welcome-message h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-greeting {
+  color: #333;
+  font-weight: 600;
+}
+
+.welcome-name {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.welcome-message p {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
 .search-form {
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -46,6 +77,22 @@
 @media (max-width: 639px) {
   .home {
     padding: 1rem 0;
+  }
+
+  .welcome-message h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-greeting {
+    font-size: 1.8rem;
+  }
+
+  .welcome-name {
+    font-size: 1.8rem;
+  }
+
+  .welcome-message p {
+    font-size: 1rem;
   }
 
   .search-form {

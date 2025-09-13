@@ -18,7 +18,7 @@ function NavBar() {
     
     return (
         <nav className="navbar">
-            <div className="navbar-brand"> < Link to ="/"> Movie App</Link> </div>
+            <div className="navbar-brand"> < Link to ="/home"> Movie App</Link> </div>
             <div className="navbar-brand"> 
                 {!token && < Link to ="/" className="nav-link"> Register</Link>}
                 < Link to ="/favorites" className="nav-link"> Favorites</Link>
