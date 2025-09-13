@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import '../css/Login.css';
+import loginImage from '../images/login-img.png';
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       const res = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -16,23 +24,74 @@ function Login({ onLogin }) {
       });
       const data = await res.json();
       if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        onLogin();
+        login(data.token);
+        navigate('/home');
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch {
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
-      <button type="submit">Login</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </form>
+    <div className="login-container">
+      {/* Left side - Image */}
+      <div className="login-left">
+        <img 
+          src={loginImage} 
+          alt="Movie App" 
+          className="login-image"
+        />
+      </div>
+
+      {/* Right side - Form */}
+      <div className="login-right">
+        <div className="login-form-container">
+          <h1 className="login-title">Welcome Back</h1>
+          <form onSubmit={handleLogin} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email Address</label>
+              <input 
+                id="email"
+                type="email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                className="form-input"
+                placeholder="Enter your email" 
+                required 
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input 
+                id="password"
+                type="password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                className="form-input"
+                placeholder="Enter your password" 
+                required 
+              />
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
+            
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? 'Signing In...' : 'Sign In'}
+            </button>
+          </form>
+          
+          <div className="login-link">
+            <p>Don't have an account? <Link to="/register">Create Account</Link></p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

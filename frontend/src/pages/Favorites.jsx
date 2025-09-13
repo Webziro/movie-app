@@ -1,10 +1,27 @@
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 import "../css/Favorites.css";
 import {useMovies} from '../contexts/MovieContext.jsx';
 import MovieCard from '../components/MovieCard.jsx'
 
 
 function Favorite() {
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
     const { favorites } = useMovies();
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]);
+
+    // Don't render anything if not authenticated
+    if (!token) { 
+        return null;
+    }
+
     if (!favorites || favorites.length === 0) {
         return (
             <div className="favorites-empty">

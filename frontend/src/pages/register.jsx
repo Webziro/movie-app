@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "../css/Register.css";
+import registerImage from "../images/register-img.jpg";
 
 export default function App() {
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ export default function App() {
           setSuccess(true);
           setValues({ username: "", email: "", password: "" });
           setSubmitted(false);
-          setTimeout(() => navigate("/"), 1000);
+          setTimeout(() => navigate("/home"), 1000);
         } else {
           setApiError(data.message || "Registration failed");
         }
@@ -59,67 +61,93 @@ export default function App() {
     } else {
       setValid(false);
     }
-  };
+  }; 
 
   return (
-    <div className="form-container">
-      <form className="register-form" onSubmit={handleSubmit}>
-        {success && (
-          <div className="success-message">
-            <h3>Welcome {values.username} {values.email}</h3>
-            <div>Your registration was successful!</div>
+    <div className="register-container">
+      {/* Left side - Form */}
+      <div className="register-left">
+        <div className="register-form-container">
+          <h1 className="register-title">Create Account</h1>
+          <form onSubmit={handleSubmit} className="register-form">
+            {success && (
+              <div className="success-message">
+                <h3>Welcome {values.username}!</h3>
+                <div>Your registration was successful!</div>
+              </div>
+            )}
+            {apiError && <div className="error-message">{apiError}</div>}
+
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">Username</label>
+              <input
+                id="username"
+                className="form-input"
+                type="text"
+                placeholder="Enter your username"
+                name="username"
+                value={values.username}
+                onChange={handleInputChange}
+                required
+              />
+              {submitted && !values.username && (
+                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a username</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email Address</label>
+              <input
+                id="email"
+                className="form-input"
+                type="email"
+                placeholder="Enter your email"
+                name="email"
+                value={values.email}
+                onChange={handleInputChange}
+                required
+              />
+              {submitted && !values.email && (
+                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter an email</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                id="password"
+                className="form-input"
+                type="password"
+                placeholder="Enter your password"
+                name="password"
+                value={values.password}
+                onChange={handleInputChange}
+                required
+              />
+              {submitted && !values.password && (
+                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a password</span>
+              )}
+            </div>
+
+            <button className="register-button" type="submit" disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
+            </button>
+          </form>
+          
+          <div className="register-link">
+            <p>Already have an account? <Link to="/login">Sign In</Link></p>
           </div>
-        )}
-        {apiError && <div className="error-message">{apiError}</div>}
+        </div>
+      </div>
 
-        {!valid && (
-          <input
-            className="form-field"
-            type="text"
-            placeholder="Username"
-            name="username"
-            value={values.username}
-            onChange={handleInputChange}
-          />
-        )}
-        {submitted &&!values.username && (
-          <span id="first-name-error">Please enter a username</span>
-        )}
-
-        {!valid && (
-          <input
-            className="form-field"
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={values.email}
-            onChange={handleInputChange}
-          />
-        )}
-        {submitted &&!values.email && (
-          <span id="last-name-error">Please enter an email</span>
-        )}
-
-        {!valid && (
-          <input
-            className="form-field"
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={values.password}
-            onChange={handleInputChange}
-          />
-        )}
-        {submitted &&!values.password && (
-          <span id="password-error">Please enter a password</span>
-        )}
-
-        {!valid && (
-          <button className="form-field" type="submit" disabled={loading}>
-            {loading? "Registering...": "Register"}
-          </button>
-        )}
-      </form>
+      {/* Right side - Image */}
+      <div className="register-right">
+        <img 
+          src={registerImage} 
+          alt="Movie App" 
+          className="register-image"
+        />
+      </div>
     </div>
   );
 }

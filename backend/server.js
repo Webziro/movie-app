@@ -44,33 +44,53 @@ app.use(bodyParser.json())
 
 // Register
 app.post('/register', async (req, res) => {
-  const { name, email, password } = req.body
-  const existingUser = await User.findOne({ email })
-  if (existingUser) return res.status(400).json({ message: 'Email already registered' })
+  try {
+    const { name, email, password } = req.body
+    const existingUser = await User.findOne({ email })
+    if (existingUser) return res.status(400).json({ message: 'Email already registered' })
 
-  const password_hash = await bcrypt.hash(password, 10)
-  const user = new User({ name, email, password_hash })
-  await user.save()
-  res.json({ message: 'User registered successfully', userId: user._id })
-
-  await user.save().then((
-
-  ) => console.log('User saved to DB')).catch(err => console.error('Save error:', err))
-
+    const password_hash = await bcrypt.hash(password, 10)
+    const user = new User({ name, email, password_hash })
+    await user.save()
+    console.log('User saved to DB:', user._id)
+    res.json({ message: 'User registered successfully', userId: user._id })
+  } catch (err) {
+    console.error('Registration error:', err)
+    res.status(500).json({ message: 'Registration failed' })
+  }
 })
 
 // Login
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body
-  const user = await User.findOne({ email })
-  if (!user) return res.status(400).json({ message: 'Invalid credentials' })
+  try {
+    const { email, password } = req.body
+    console.log('Login attempt for email:', email)
+    
+    const user = await User.findOne({ email })
+    if (!user) {
+      console.log('User not found for email:', email)
+      return res.status(400).json({ message: 'Invalid credentials' })
+    }
 
-  const valid = await bcrypt.compare(password, user.password_hash)
-  if (!valid) return res.status(400).json({ message: 'Invalid credentials' })
+    const valid = await bcrypt.compare(password, user.password_hash)
+    if (!valid) {
+      console.log('Invalid password for email:', email)
+      return res.status(400).json({ message: 'Invalid credentials' })
+    }
 
-  const jwtSecret = process.env.JWT_SECRET
-  const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' })
-  res.json({ token, message: 'Login successful' })
+    const jwtSecret = process.env.JWT_SECRET
+    if (!jwtSecret) {
+      console.error('JWT_SECRET not found in environment variables')
+      return res.status(500).json({ message: 'Server configuration error' })
+    }
+
+    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' })
+    console.log('Login successful for user:', user._id)
+    res.json({ token, message: 'Login successful' })
+  } catch (err) {
+    console.error('Login error:', err)
+    res.status(500).json({ message: 'Login failed' })
+  }
 })
 
 // Auth middleware 

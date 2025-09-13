@@ -1,4 +1,3 @@
-<Route path="/movie/:id" element={<MovieDetails />} />
 import './css/App.css'
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
@@ -9,6 +8,8 @@ import { MovieProvider } from './contexts/MovieContext.jsx';
 import Contact from './pages/contact.jsx';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
+import Logout from './pages/Logout.jsx';
+
 
 
 function App() {
@@ -18,12 +19,13 @@ function App() {
       <NavBar />
       <main className='main-container'>
         <Routes>
-          <Route path='/register' element={<Register />} />
+          <Route path='/' element={<Register />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/' element={<Home />} />
+          <Route path='/home' element={<Home />} />
           <Route path='/favorites' element={<Favorite />} />
           <Route path='/movie/:id' element={<MovieDetails />} />
           <Route path='/contact' element={<Contact />} />
+          <Route path='/logout' element={<Logout />} />
         </Routes>
       </main>
     </MovieProvider>
