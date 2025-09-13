@@ -1,11 +1,15 @@
 import MovieCard from "../components/MovieCard";    
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import "../css/Home.css";
 import { getPopularMovies, searchMovies } from "../services/api.js";
 
 
 function Home() {
-
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
+    
     const [searchQuery, setSearchQuery] = useState("");
     // const [filteredMovies, setFilteredMovies] = useState([]);
     
@@ -13,6 +17,12 @@ function Home() {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/login', { replace: true });
+        }
+    }, [token, navigate]);
     
     useEffect(() => {
         // Fetch popular movies on component mount
@@ -58,6 +68,11 @@ function Home() {
     if (loading) {
         return <div className="home"><p>Loading...</p></div>;
     }
+    // Don't render anything if not authenticated
+    if (!token) {
+        return null;
+    }
+
     if (error) {
         return <div className="home"><p style={{color: 'red'}}>{error}</p></div>;
     }

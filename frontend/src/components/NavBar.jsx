@@ -10,7 +10,10 @@ function NavBar() {
     const handleLogout = (e) => {
         e.preventDefault();
         logout();
-        navigate('/login');
+        // Replace current history entry and navigate to login
+        navigate('/login', { replace: true });
+        // Clear any remaining history by pushing a new state
+        window.history.pushState(null, '', '/login');
     };
     
     return (
