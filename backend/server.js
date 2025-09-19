@@ -50,11 +50,11 @@ const ResetTokenSchema = new mongoose.Schema({
 const ResetToken = mongoose.model('ResetToken', ResetTokenSchema)
 
 // Email configuration
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'your-email@gmail.com',
-    pass: process.env.EMAIL_PASS || 'your-app-password'
+    user: process.env.EMAIL_USER || 'stanleyamaziro@gmail.com',
+    pass: process.env.EMAIL_PASS || 'dnna ruhm lzle ulgk'
   }
 })
 
@@ -208,7 +208,7 @@ app.post('/forgot-password', async (req, res) => {
 
     // Email content
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'your-email@gmail.com',
+      from: process.env.EMAIL_USER || 'stanleyamaziro@gmail.com',
       to: email,
       subject: 'Password Reset Request - Movie App',
       html: `
