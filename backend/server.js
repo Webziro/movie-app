@@ -98,7 +98,6 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
-    const jwtSecret = process.env.JWT_SECRET
     if (!jwtSecret) {
       console.error('JWT_SECRET not found in environment variables')
       return res.status(500).json({ message: 'Server configuration error' })
@@ -116,13 +115,21 @@ app.post('/login', async (req, res) => {
 // Auth middleware 
 const auth = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1]
-  if (!token) return res.status(401).json({ message: 'Missing token' })
+  console.log('Auth middleware - token received:', token ? 'yes' : 'no')
+  console.log('Auth middleware - jwtSecret available:', jwtSecret ? 'yes' : 'no')
+  
+  if (!token) {
+    console.log('Auth middleware - missing token')
+    return res.status(401).json({ message: 'Missing token' })
+  }
 
   try {
     const decoded = jwt.verify(token, jwtSecret);
+    console.log('Auth middleware - token decoded successfully for user:', decoded.userId)
     req.userId = decoded.userId
     next()
-  } catch {
+  } catch (error) {
+    console.log('Auth middleware - token verification failed:', error.message)
     res.status(401).json({ message: 'Invalid token' })
   }
 }
@@ -250,40 +257,40 @@ app.post('/forgot-password', async (req, res) => {
   }
 })
 
-// Reset Password
-app.post('/reset-password', async (req, res) => {
+// Change Password (for logged-in users)
+app.post('/change-password', auth, async (req, res) => {
   try {
-    const { token, password } = req.body
+    console.log('Change password request received for user:', req.userId)
+    const { currentPassword, newPassword } = req.body
     
-    // Find the reset token in database
-    const resetTokenDoc = await ResetToken.findOne({ 
-      token: token, 
-      used: false, 
-      expires_at: { $gt: new Date() } 
-    })
-    
-    if (!resetTokenDoc) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' })
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Current password and new password are required' })
     }
-
+    
     // Find the user
-    const user = await User.findById(resetTokenDoc.user_id)
+    const user = await User.findById(req.userId)
     if (!user) {
-      return res.status(400).json({ message: 'User not found' })
+      console.log('User not found:', req.userId)
+      return res.status(404).json({ message: 'User not found' })
     }
 
-    // Update password
-    user.password_hash = await bcrypt.hash(password, 10)
+    console.log('User found, verifying current password...')
+    // Verify current password
+    const validCurrentPassword = await bcrypt.compare(currentPassword, user.password_hash)
+    if (!validCurrentPassword) {
+      console.log('Current password verification failed')
+      return res.status(400).json({ message: 'Current password is incorrect' })
+    }
+
+    console.log('Current password verified, updating to new password...')
+    // Update to new password
+    user.password_hash = await bcrypt.hash(newPassword, 10)
     await user.save()
 
-    // Mark token as used
-    resetTokenDoc.used = true
-    await resetTokenDoc.save()
-
-    console.log(`Password reset successful for user: ${user._id}`)
-    res.json({ message: 'Password reset successfully' })
+    console.log(`Password changed successfully for user: ${user._id}`)
+    res.json({ message: 'Password changed successfully' })
   } catch (error) {
-    console.error('Reset password error:', error)
-    res.status(500).json({ message: 'Password reset failed' })
+    console.error('Change password error:', error)
+    res.status(500).json({ message: 'Password change failed' })
   }
 })

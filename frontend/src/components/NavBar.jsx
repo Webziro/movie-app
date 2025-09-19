@@ -23,6 +23,7 @@ function NavBar() {
                 {!token && < Link to ="/" className="nav-link"> Register</Link>}
                 < Link to ="/favorites" className="nav-link"> Favorites</Link>
                 < Link to ="/contact" className="nav-link"> Contact </Link>
+                {token && < Link to ="/change-password" className="nav-link"> Change Password</Link>}
                 {token ? (
                     <a href="#" onClick={handleLogout} className="nav-link"> Logout </a>
                 ) : (
