@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const nodemailer = require('nodemailer')
+const crypto = require('crypto')
 require('dotenv').config()
 const jwtSecret = process.env.JWT_SECRET
 
@@ -37,6 +39,24 @@ const ContactSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 })
 const Contact = mongoose.model('Contact', ContactSchema)
+
+const ResetTokenSchema = new mongoose.Schema({
+  user_id: mongoose.Schema.Types.ObjectId,
+  token: String,
+  expires_at: Date,
+  used: { type: Boolean, default: false },
+  created_at: { type: Date, default: Date.now }
+})
+const ResetToken = mongoose.model('ResetToken', ResetTokenSchema)
+
+// Email configuration
+const transporter = nodemailer.createTransporter({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || 'your-email@gmail.com',
+    pass: process.env.EMAIL_PASS || 'your-app-password'
+  }
+})
 
 const app = express()
 app.use(cors())
@@ -161,3 +181,109 @@ app.post('/contact', async (req, res) => {
 })
 
 app.listen(3000, () => console.log('Server running on port 3000'))
+
+// Forgot Password
+app.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' })
+    }
+
+    // Generate a secure random token
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    const expiresAt = new Date(Date.now() + 3600000) // 1 hour from now
+
+    // Store the reset token in database
+    const resetTokenDoc = new ResetToken({
+      user_id: user._id,
+      token: resetToken,
+      expires_at: expiresAt
+    })
+    await resetTokenDoc.save()
+
+    // Create reset URL
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`
+
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'your-email@gmail.com',
+      to: email,
+      subject: 'Password Reset Request - Movie App',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Password Reset Request</h2>
+          <p>Hello ${user.name},</p>
+          <p>You have requested to reset your password for your Movie App account.</p>
+          <p>Click the button below to reset your password:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" 
+               style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                      color: white; 
+                      padding: 12px 30px; 
+                      text-decoration: none; 
+                      border-radius: 10px; 
+                      display: inline-block; 
+                      font-weight: bold;">
+              Reset Password
+            </a>
+          </div>
+          <p>Or copy and paste this link in your browser:</p>
+          <p style="word-break: break-all; color: #666;">${resetUrl}</p>
+          <p><strong>This link will expire in 1 hour.</strong></p>
+          <p>If you didn't request this password reset, please ignore this email.</p>
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+          <p style="color: #666; font-size: 12px;">This is an automated message from Movie App.</p>
+        </div>
+      `
+    }
+
+    // Send email
+    await transporter.sendMail(mailOptions)
+    console.log(`Password reset email sent to: ${email}`)
+
+    res.json({ message: 'Password reset link sent to your email address' })
+  } catch (error) {
+    console.error('Forgot password error:', error)
+    res.status(500).json({ message: 'Failed to send reset email' })
+  }
+})
+
+// Reset Password
+app.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body
+    
+    // Find the reset token in database
+    const resetTokenDoc = await ResetToken.findOne({ 
+      token: token, 
+      used: false, 
+      expires_at: { $gt: new Date() } 
+    })
+    
+    if (!resetTokenDoc) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' })
+    }
+
+    // Find the user
+    const user = await User.findById(resetTokenDoc.user_id)
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' })
+    }
+
+    // Update password
+    user.password_hash = await bcrypt.hash(password, 10)
+    await user.save()
+
+    // Mark token as used
+    resetTokenDoc.used = true
+    await resetTokenDoc.save()
+
+    console.log(`Password reset successful for user: ${user._id}`)
+    res.json({ message: 'Password reset successfully' })
+  } catch (error) {
+    console.error('Reset password error:', error)
+    res.status(500).json({ message: 'Password reset failed' })
+  }
+})

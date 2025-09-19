@@ -88,6 +88,7 @@ function Login() {
           
           <div className="login-link">
             <p>Don't have an account? <Link to="/">Create Account</Link></p>
+            <p><Link to="/forgot-password">Forgot Password?</Link></p>
           </div>
         </div>
       </div>

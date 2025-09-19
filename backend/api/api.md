@@ -37,3 +37,12 @@ API Documentation
 - Response:  
   { "message": "Subscription activated", "status": "active", "start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD" }
 
+5. Forgot Passowrd
+- URL: /forgot-password
+- METHOD: POST
+- Headers:
+    {"Authorization": "Bearer <token>"}
+- Body:
+  {"email": "string"}
+-Response:
+  {"message": "Link sent to your registered email"}

@@ -1,6 +1,8 @@
 import './css/App.css'
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 import Home from './pages/Home.jsx';
 import Favorite from './pages/Favorites.jsx';
 import MovieDetails from './pages/MovieDetails.jsx';
@@ -21,6 +23,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Register />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
           <Route path='/home' element={<Home />} />
           <Route path='/favorites' element={<Favorite />} />
           <Route path='/movie/:id' element={<MovieDetails />} />
