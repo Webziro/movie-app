@@ -14,6 +14,7 @@ import NavBar from './components/NavBar.jsx';
 import Logout from './pages/Logout.jsx';
 import WatchTrailer from './pages/WatchTrailer.jsx';
 import MovieReviews from './pages/MovieReviews.jsx';
+import WatchFullMovie from './pages/WatchFullMovie.jsx';
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='/logout' element={<Logout />} />
           <Route path='/watch-trailer/:id' element={<WatchTrailer/>}/>
           <Route path='/movie-reviews/:id' element={<MovieReviews/>}/>
+          <Route path='/full-movies' element={<WatchFullMovie/>}/>
         </Routes>
       </main>
     </MovieProvider>
