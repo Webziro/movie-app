@@ -1,10 +1,11 @@
 import "../css/MovieCard.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useMovies} from '../contexts/MovieContext.jsx'
 
 function MovieCard({movie}){
     const {favorites, addToFavorites, removeFromFavorites, isFavorite} = useMovies();
     const favorite = isFavorite(movie.id); // This line remains unchanged
+    const navigate = useNavigate();
     
     function onfavoriteClick(e){
         e.preventDefault();
@@ -13,6 +14,16 @@ function MovieCard({movie}){
             }else{
             addToFavorites(movie);
         }
+    }
+
+    function onWatchTrailerClick(e){
+        e.preventDefault();
+        navigate(`/watch-trailer/${movie.id}`);
+    }
+
+    function onReviewsClick(e){
+        e.preventDefault();
+        navigate(`/movie-reviews/${movie.id}`);
     }
 
     // TheMovieDB poster base URL
@@ -34,6 +45,10 @@ function MovieCard({movie}){
                         >
                             ❤️
                         </button>
+                        <div className="action-buttons">
+                            <button type="button" className="action-btn" onClick={onWatchTrailerClick} title="Watch trailer" aria-label="Watch trailer">▶</button>
+                            <button type="button" className="action-btn" onClick={onReviewsClick} title="Reviews & ratings" aria-label="Reviews & ratings">📝</button>
+                        </div>
                     </div>
                 </div>
                 <div className="movie-info">

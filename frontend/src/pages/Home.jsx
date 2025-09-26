@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import "../css/Home.css";
 import { getPopularMovies, searchMovies } from "../services/api.js";
+import { fetchMovieVideos } from "../services/api.js";
+
+//Movie reviews and ratings
+import { fetchMovieReviews } from "../services/api.js";
+
 
 
 function Home() {
@@ -26,6 +31,28 @@ function Home() {
         if (hour < 12) return "Good Morning";
         if (hour < 18) return "Good Afternoon";
         return "Good Evening";
+    };
+
+    //Function to fetch movie reviews and ratings
+    const fetchMovieReviews = async (movieId) => {
+        const reviews = await fetchMovieReviews(movieId);
+        console.log("Fetched movie reviews:", reviews);
+    };
+
+    //Function to watch trailers and reviews
+    const watchTrailer = async (movieId) => {
+        try {
+            const videos = await fetchMovieVideos(movieId);
+            console.log("Fetched movie videos:", videos);
+            // Open the first video in a new tab
+            if (videos.length > 0) {
+                window.open(`https://www.youtube.com/watch?v=${videos[0].key}`, "_blank");
+            } else {
+                console.log("No videos found");
+            }
+        } catch (error) {
+            console.error("Error fetching movie videos:", error);
+        }
     };
 
     // Function to fetch user data

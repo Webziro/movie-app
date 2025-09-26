@@ -12,6 +12,8 @@ import Contact from './pages/contact.jsx';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import Logout from './pages/Logout.jsx';
+import WatchTrailer from './pages/WatchTrailer.jsx';
+import MovieReviews from './pages/MovieReviews.jsx';
 
 
 
@@ -32,6 +34,8 @@ function App() {
           <Route path='/movie/:id' element={<MovieDetails />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/logout' element={<Logout />} />
+          <Route path='/watch-trailer/:id' element={<WatchTrailer/>}/>
+          <Route path='/movie-reviews/:id' element={<MovieReviews/>}/>
         </Routes>
       </main>
     </MovieProvider>

@@ -31,4 +31,18 @@ export async function getTopRatedMovies() {
     const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
     const data = await response.json();
     return data.results;
-}   
+}
+
+//Watch movie reviews and trailers
+export async function fetchMovieVideos(movieId) {
+    const response = await fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`);
+    const data = await response.json();
+    return data.results;
+}
+
+// Movie reviews
+export async function fetchMovieReviews(movieId) {
+    const response = await fetch(`${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`);
+    const data = await response.json();
+    return data.results || [];
+}

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchMovieDetails } from "../services/api";
 import { useMovies } from "../contexts/MovieContext.jsx";
@@ -56,6 +56,14 @@ function MovieDetails() {
         <div className="movie-info">
           <p>{movie.overview}</p>
           {/* Add more details as needed */}
+          <div className="details-actions">
+            <Link to={`/watch-trailer/${movie.id}`} style={{ textDecoration: "none" }}>
+              <button className="details-btn">▶ Watch Trailer</button>
+            </Link>
+            <Link to={`/movie-reviews/${movie.id}`} style={{ textDecoration: "none" }}>
+              <button className="details-btn">📝 Reviews & Ratings</button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
