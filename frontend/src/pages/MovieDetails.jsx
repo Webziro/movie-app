@@ -27,12 +27,35 @@ function MovieDetails() {
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : "https://via.placeholder.com/500x750?text=No+Image";
 
+  //Function to add or remove movie from favorites
   function onfavoriteClick(e) {
     e.preventDefault();
     if (favorite) {
       removeFromFavorites(movie.id);
     } else {
       addToFavorites(movie);
+    }
+  }
+
+  //Function to share movie link
+  function onShareClick(e) {
+    e.preventDefault();
+    const shareData = {
+      title: movie.title,
+      text: `Hey! check out this movie: ${movie.title}`,
+      url: `${window.location.origin}/movie/${movie.id}`
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData).catch(console.error);
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareData.url).then(() => {
+        alert('Movie link copied to clipboard!');
+      }).catch(() => {
+        // Final fallback: show URL
+        prompt('Copy this link:', shareData.url);
+      });
     }
   }
 
@@ -56,13 +79,14 @@ function MovieDetails() {
         <div className="movie-info">
           <p>{movie.overview}</p>
           {/* Add more details as needed */}
-          <div className="details-actions">
+          <div className="details-actions movie-buttons-container">
             <Link to={`/watch-trailer/${movie.id}`} style={{ textDecoration: "none" }}>
               <button className="details-btn">▶ Watch Trailer</button>
             </Link>
             <Link to={`/movie-reviews/${movie.id}`} style={{ textDecoration: "none" }}>
               <button className="details-btn">📝 Reviews & Ratings</button>
             </Link>
+            <button className="details-btn" onClick={onShareClick}>🔗 Share Movie</button>
           </div>
         </div>
       </div>

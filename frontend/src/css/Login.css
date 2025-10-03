@@ -60,7 +60,7 @@
   text-align: center;
   margin-bottom: 2rem;
   color: #333;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
@@ -86,7 +86,7 @@
   padding: 1rem;
   border: 2px solid #e1e5e9;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.5rem;
   transition: all 0.3s ease;
   background: #f8f9fa;
 }

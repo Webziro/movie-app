@@ -26,6 +26,27 @@ function MovieCard({movie}){
         navigate(`/movie-reviews/${movie.id}`);
     }
 
+    function onShareClick(e){
+        e.preventDefault();
+        const shareData = {
+            title: movie.title,
+            text: `Check out this movie: ${movie.title}`,
+            url: `${window.location.origin}/movie/${movie.id}`
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(console.error);
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(shareData.url).then(() => {
+                alert('Movie link copied to clipboard!');
+            }).catch(() => {
+                // Final fallback: show URL
+                prompt('Copy this link:', shareData.url);
+            });
+        }
+    }
+
     // TheMovieDB poster base URL
     const posterUrl = movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -48,6 +69,7 @@ function MovieCard({movie}){
                         <div className="action-buttons">
                             <button type="button" className="action-btn" onClick={onWatchTrailerClick} title="Watch trailer" aria-label="Watch trailer">▶</button>
                             <button type="button" className="action-btn" onClick={onReviewsClick} title="Reviews & ratings" aria-label="Reviews & ratings">📝</button>
+                            <button type="button" className="action-btn" onClick={onShareClick} title="Share movie" aria-label="Share movie">🔗</button>
                         </div>
                     </div>
                 </div>

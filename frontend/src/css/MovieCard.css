@@ -107,13 +107,15 @@
   margin-top: auto;
 }
 
-.action-buttons {
+/* Uncomment this to use Action buttons located in the movie card component to make icons to
+seat next to each other and center them vertically and horizontally */
+/* .action-buttons {
   display: flex;
   gap: 0.5rem;
   position: absolute;
   right: 0.75rem;
   bottom: 0.75rem;
-}
+} */
 
 .action-btn {
   color: #ffff;
@@ -129,35 +131,47 @@
 }
 
 .action-btn:hover {
-  background-color: #545ae6;
+  background-color: #40406550;
 }
 
-.action-btn:active {
+ .action-btn:active {
   transform: scale(0.96);
 }
 
 /* Movie details action buttons */
-.details-actions {
+/* .details-actions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 0.75rem;
+}  */
+
+
+
+.details-actions.movie-buttons-container {
+  display: flex; /* Use Flexbox to align items side by side */
+  gap: 10px; /* Adds consistent spacing between buttons */
+  align-items: center; /* Vertically centers the buttons */
+  margin: 20px 0; /* Optional: Adds vertical margin for spacing */
 }
 
 .details-btn {
-  background-color: #646cff;
-  color: #ffff;
-  padding: 0.5rem 0.75rem;
-  border-radius: 9999px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: background-color 0.2s, transform 0.1s;
+  background-color: #1a73e8; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 15px;
+  font-size: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth hover transition */
 }
 
 .details-btn:hover {
-  background-color: #545ae6;
+  background-color: #1557b0; /* Darker shade on hover */
+}
+
+.details-btn:active {
+  background-color: #103a6d; /* Even darker shade when clicked */
 }
 
 .details-btn:active {
