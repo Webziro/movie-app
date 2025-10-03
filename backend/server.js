@@ -49,12 +49,21 @@ const ResetTokenSchema = new mongoose.Schema({
 })
 const ResetToken = mongoose.model('ResetToken', ResetTokenSchema)
 
-// Email configuration
+// Email configuration (use environment variables only)
+const emailUser = process.env.EMAIL_USER
+const emailPass = process.env.EMAIL_PASS
+
+if (!emailUser || !emailPass) {
+  console.error('Missing EMAIL_USER or EMAIL_PASS in environment variables')
+  // Uncomment to prevent server start without email credentials
+  // process.exit(1)
+}
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'stanleyamaziro@gmail.com',
-    pass: process.env.EMAIL_PASS || 'dnna ruhm lzle ulgk'
+    user: emailUser,
+    pass: emailPass
   }
 })
 
@@ -215,7 +224,7 @@ app.post('/forgot-password', async (req, res) => {
 
     // Email content
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'stanleyamaziro@gmail.com',
+      from: emailUser,
       to: email,
       subject: 'Password Reset Request - Movie App',
       html: `
