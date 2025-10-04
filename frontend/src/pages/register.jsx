@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../config/api.js";
 import "../css/Register.css";
 import registerImage from "../images/register-img.jpg";
 
@@ -35,7 +36,7 @@ export default function App() {
       setValid(true);
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/register", {
+        const res = await fetch(`${API_BASE_URL}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

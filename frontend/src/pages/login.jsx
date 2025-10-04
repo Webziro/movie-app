@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config/api.js';
 import '../css/Login.css';
 import loginImage from '../images/login-img.png';
 
@@ -17,7 +18,7 @@ function Login() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3000/login', {
+      const res = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

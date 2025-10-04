@@ -2,6 +2,7 @@ import MovieCard from "../components/MovieCard";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import { API_BASE_URL } from "../config/api.js";
 import "../css/Home.css";
 import { getPopularMovies, searchMovies } from "../services/api.js";
 
@@ -40,7 +41,7 @@ function Home() {
         
         try {
             console.log('Fetching user data with token:', token);
-            const res = await fetch('http://localhost:3000/user', {
+            const res = await fetch(`${API_BASE_URL}/user`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

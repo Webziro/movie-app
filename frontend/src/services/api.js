@@ -1,5 +1,7 @@
-const API_KEY = "52ec3563e14900d11681ced3bf093f1d"; // Replace with your actual API key
-const BASE_URL = "https://api.themoviedb.org/3";
+import { TMDB_API_KEY, TMDB_BASE_URL } from '../config/api.js';
+
+const API_KEY = TMDB_API_KEY;
+const BASE_URL = TMDB_BASE_URL;
 
 
 

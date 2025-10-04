@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config/api.js';
 import '../css/Contact.css';
 import contactImage from '../images/login-img.png';
 
@@ -14,7 +15,7 @@ function Contact() {
     setStatus('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3000/contact', {
+      const res = await fetch(`${API_BASE_URL}/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, message }),

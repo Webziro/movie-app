@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api.js';
 import '../css/ForgotPassword.css';
 import loginImage from '../images/login-img.png';
 
@@ -16,7 +17,7 @@ function ForgotPassword() {
     setLoading(true);
     
     try {
-      const res = await fetch('http://localhost:3000/forgot-password', {
+      const res = await fetch(`${API_BASE_URL}/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
