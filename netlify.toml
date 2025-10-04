@@ -1,10 +1,11 @@
 [build]
-  command = "cd netlify/functions && npm install && cd ../../frontend && npm install && npm run build"
+  command = "cd netlify/functions && npm install && cd ../../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
   publish = "frontend/dist"
   functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--force"
 
 [[redirects]]
   from = "/api/*"
