@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMovieDetails } from "../services/api";
+import { fetchMovieDetails } from "../services/api.js";
 import { useMovies } from "../contexts/MovieContext.jsx";
 import "../css/MovieCard.css";
 

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext.jsx';
 import { API_BASE_URL } from '../config/api.js';
 import '../css/Login.css';
 import loginImage from '../images/login-img.png';

@@ -2,7 +2,7 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMovieReviews } from "../services/api";
+import { fetchMovieReviews } from "../services/api.js";
 
 function MovieReviews() {
     const { id } = useParams();

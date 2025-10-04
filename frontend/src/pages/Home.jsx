@@ -1,7 +1,7 @@
-import MovieCard from "../components/MovieCard";    
+import MovieCard from "../components/MovieCard.jsx";    
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 import { API_BASE_URL } from "../config/api.js";
 import "../css/Home.css";
 import { getPopularMovies, searchMovies } from "../services/api.js";

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext.jsx';
 import "../css/Favorites.css";
 import {useMovies} from '../contexts/MovieContext.jsx';
 import MovieCard from '../components/MovieCard.jsx'

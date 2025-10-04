@@ -2,7 +2,7 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMovieVideos } from "../services/api";
+import { fetchMovieVideos } from "../services/api.js";
 
 function WatchFullMovie() {
     const { id } = useParams();
