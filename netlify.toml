@@ -1,15 +1,14 @@
 [build]
-  base = "."  # Repo root (correct)
-  command = "cd netlify/functions && npm install && cd ../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
-  publish = "frontend/dist"  # Correct
-  functionsDirectory = "netlify/functions"  # Correct
+  base = "."  # Repo root
+  command = "cd netlify/functions && npm install && cd ../../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
+  publish = "frontend/dist"
+  functionsDirectory = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"  # Safer than --force
+  NPM_FLAGS = "--legacy-peer-deps"
 
-# Opt-out secrets scanning for VITE_TMDB_API_KEY (if still needed)
-SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY"
+SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY"  # If needed
 
 [[redirects]]
   from = "/api/*"
