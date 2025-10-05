@@ -1,12 +1,14 @@
+
+
 [build]
-  base = "."  # Start from repo root (fixes path resolution)
-  command = "cd netlify/functions && npm install && cd frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
-  publish = "frontend/dist"  # Now resolves correctly to /opt/build/repo/frontend/dist
-  functionsDirectory = "netlify/functions"  # Standard key; resolves to root-level
+  command = "cd .. && cd netlify/functions && npm install && cd ../../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
+  publish = "frontend/dist"
+  functions = "netlify/functions"
+  base = "frontend"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"  # Safer than --force; handles peer dep conflicts
+  NPM_FLAGS = "--force"
 
 [[redirects]]
   from = "/api/*"
