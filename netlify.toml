@@ -1,5 +1,5 @@
 [build]
-  base = "."  # Repo root
+  base = "."
   command = "cd netlify/functions && npm install && cd ../../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
   publish = "frontend/dist"
   functionsDirectory = "netlify/functions"
@@ -7,8 +7,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-
-SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY"  # If needed
+  SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY"  # This suppresses detection
 
 [[redirects]]
   from = "/api/*"
