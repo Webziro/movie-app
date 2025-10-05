@@ -11,7 +11,7 @@ import { MovieProvider } from './contexts/MovieContext';
 import Contact from './pages/contact';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import Logout from './pages/Logout';
+import Logout from './pages/logout';
 import WatchTrailer from './pages/WatchTrailer';
 import MovieReviews from './pages/MovieReviews';
 import WatchFullMovie from './pages/WatchFullMovie';
