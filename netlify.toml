@@ -19,3 +19,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+  [build]
+  # ... existing
+  environment = { SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY" }
