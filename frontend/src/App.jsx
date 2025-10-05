@@ -1,5 +1,5 @@
 import './css/App.css'
-import Register from './pages/Register.jsx';
+import Register from './pages/register';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
