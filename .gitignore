@@ -1,6 +1,6 @@
 # Environment files
 .env
-.env.*
+.env.local*
 backend/.env
 frontend/.env
 

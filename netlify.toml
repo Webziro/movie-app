@@ -7,7 +7,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-  SECRETS_SCAN_OMIT_KEYS = "VITE_TMDB_API_KEY"  # This suppresses detection
+  SECRETS_SCAN_OMIT_KEYS = "EMAIL_PASS,EMAIL_USER,VITE_TMDB_API_KEY"  # Suppress these
 
 [[redirects]]
   from = "/api/*"
