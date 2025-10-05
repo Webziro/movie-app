@@ -1,6 +1,6 @@
 import './css/App.css'
 import Register from './pages/register';
-import Login from './pages/Login';
+import Login from './pages/login';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ChangePassword from './pages/ChangePassword';
