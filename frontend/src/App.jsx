@@ -1,20 +1,20 @@
 import './css/App.css'
-import Register from './pages/register';
-import Login from './pages/login';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import ChangePassword from './pages/ChangePassword';
-import Home from './pages/Home';
-import Favorite from './pages/Favorites';
-import MovieDetails from './pages/MovieDetails';
-import { MovieProvider } from './contexts/MovieContext';
-import Contact from './pages/contact';
+import Register from './pages/Register.jsx';
+import Login from './pages/Login.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
+import ChangePassword from './pages/ChangePassword.jsx';
+import Home from './pages/Home.jsx';
+import Favorite from './pages/Favorites.jsx';
+import MovieDetails from './pages/MovieDetails.jsx';
+import { MovieProvider } from './contexts/MovieContext.jsx';
+import Contact from './pages/contact.jsx';
 import { Routes, Route } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import Logout from './pages/logout';
-import WatchTrailer from './pages/WatchTrailer';
-import MovieReviews from './pages/MovieReviews';
-import WatchFullMovie from './pages/WatchFullMovie';
+import NavBar from './components/NavBar.jsx';
+import Logout from './pages/Logout.jsx';
+import WatchTrailer from './pages/WatchTrailer.jsx';
+import MovieReviews from './pages/MovieReviews.jsx';
+import WatchFullMovie from './pages/WatchFullMovie.jsx';
 
 
 

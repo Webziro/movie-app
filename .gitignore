@@ -1,6 +1,6 @@
 # Environment files
 .env
-.env.local*
+.env.*
 backend/.env
 frontend/.env
 
@@ -29,3 +29,7 @@ backend/dist/
 
 # Coverage
 coverage/
+
+
+VITE_API_URL=http://localhost:3000/api
+VITE_TMDB_API_KEY=52ec3563e14900d11681ced3bf093f1d

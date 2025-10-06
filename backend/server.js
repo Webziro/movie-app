@@ -80,7 +80,7 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 
 // Register
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   try {
     const { name, email, password } = req.body
     const existingUser = await User.findOne({ email })
@@ -98,7 +98,7 @@ app.post('/register', async (req, res) => {
 })
 
 // Login
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body
     console.log('Login attempt for email:', email)
@@ -152,7 +152,7 @@ const auth = (req, res, next) => {
 }
 
 // Get user data
-app.get('/user', auth, async (req, res) => {
+app.get('/api/user', auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password_hash')
     if (!user) return res.status(404).json({ message: 'User not found' })
@@ -169,7 +169,7 @@ app.get('/user', auth, async (req, res) => {
 })
 
 // Subscribe
-app.post('/subscribe', auth, async (req, res) => {
+app.post('/api/subscribe', auth, async (req, res) => {
   try {
     const { plan } = req.body
     const start_date = new Date()
@@ -197,7 +197,7 @@ app.post('/subscribe', auth, async (req, res) => {
 })
 
 // Contact
-app.post('/contact', async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body
   const contact = new Contact({ name, email, message })
   await contact.save()
@@ -207,7 +207,7 @@ app.post('/contact', async (req, res) => {
 app.listen(3000, () => console.log('Server running on port 3000'))
 
 // Forgot Password
-app.post('/forgot-password', async (req, res) => {
+app.post('/api/forgot-password', async (req, res) => {
   try {
     const { email } = req.body
     const user = await User.findOne({ email })
@@ -275,7 +275,7 @@ app.post('/forgot-password', async (req, res) => {
 })
 
 // Change Password (for logged-in users)
-app.post('/change-password', auth, async (req, res) => {
+app.post('/api/change-password', auth, async (req, res) => {
   try {
     console.log('Change password request received for user:', req.userId)
     const { currentPassword, newPassword } = req.body

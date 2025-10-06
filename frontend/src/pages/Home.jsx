@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 import { API_BASE_URL } from "../config/api.js";
 import "../css/Home.css";
 import { getPopularMovies, searchMovies } from "../services/api.js";
-
+import Footer from "./Footer.jsx";
 
 
 function Home() {
@@ -157,9 +157,12 @@ function Home() {
                     )}
                 </div>
             )}
-           
+            {/* Footer component */}
+            <Footer />
         </div>
     );
+    
+    
 }
 
 export default Home;

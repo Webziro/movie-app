@@ -13,6 +13,7 @@ function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  //Handle login function
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -30,14 +31,23 @@ function Login() {
       } else {
         setError(data.message || 'Login failed');
       }
+      //If password or email is incorrect, set error message
+      if (data.message === 'Invalid credentials') {
+        setError('Invalid credentials');
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError('Login failed');
+      //If there is an error, set error message
+      if (err.message === 'Invalid credentials') {
+        setError('Invalid credentials');
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  // Render the login page
   return (
     <div className="login-container">
       {/* Left side - Image */}
