@@ -38,6 +38,7 @@ mongoose.connect(MONGODB_URI)
     process.exit(1);
   });
 
+
 // Models
 const UserSchema = new mongoose.Schema({
   name: String,
@@ -83,17 +84,17 @@ const transporter = nodemailer.createTransporter({
 
 const app = express();
 
-// CORS configuration (dynamic for prod/dev)
+// CORS configuration (dynamic for prod/dev) CORS = Cross-Origin Resource Sharing, is used to allow requests from different origins.
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL || 'https://your-netlify-app.netlify.app']
-    : 'http://localhost:5173',
+    ? process.env.FRONTEND_URL : 'http://localhost:5173',
   credentials: true
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Auth middleware 
+
+// Auth middleware is used to authenticate the user and protect the routes from unauthorized access.
 const auth = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   console.log('Auth middleware - token received:', token ? 'yes' : 'no');
@@ -103,7 +104,6 @@ const auth = (req, res, next) => {
     console.log('Auth middleware - missing token');
     return res.status(401).json({ message: 'Missing token' });
   }
-
   try {
     const decoded = jwt.verify(token, jwtSecret);
     console.log('Auth middleware - token decoded successfully for user:', decoded.userId);
@@ -115,13 +115,14 @@ const auth = (req, res, next) => {
   }
 };
 
-// Register
+// Register is used to register a new user. Also include salting the password.
 app.post('/api/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
+    // Salting the password
     const password_hash = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password_hash });
     await user.save();
@@ -133,7 +134,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Login
+// Login is used to login a user.
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -160,7 +161,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Get user data
+// Get user data is used to get the user data 
 app.get('/api/user', auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password_hash');
@@ -177,7 +178,7 @@ app.get('/api/user', auth, async (req, res) => {
   }
 });
 
-// Subscribe
+// Subscribe is used to subscribe a user to a plan.
 app.post('/api/subscribe', auth, async (req, res) => {
   try {
     const { plan } = req.body;
