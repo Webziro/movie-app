@@ -18,7 +18,7 @@ export const MovieProvider = ({ children }) => {
         setFavorites(storedFavorites);
     }, []);
 
-    //oNCE THE FAVORITE CHANGES, THIS FAVORITE RUNS TO SAVE THE NEW FAV.
+    //ONCE THE FAVORITE CHANGES, THIS FAVORITE RUNS TO SAVE THE NEW FAV.
     useEffect(() => {
         localStorage.setItem("favorites", JSON.stringify(favorites));
     }, [favorites]);
