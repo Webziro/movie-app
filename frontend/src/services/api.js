@@ -48,3 +48,10 @@ export async function fetchMovieReviews(movieId) {
     const data = await response.json();
     return data.results || [];
 }
+
+// Movie recommendations
+export async function fetchMovieRecommendations(movieId) {
+    const response = await fetch(`${BASE_URL}/movie/${movieId}/recommendations?api_key=${API_KEY}`);
+    const data = await response.json();
+    return data.results || [];
+}
