@@ -47,6 +47,12 @@ function MovieCard({movie}){
         }
     }
 
+    //Function Movie Recommendations
+    function onRecommendationsClick(e) {
+        e.preventDefault();
+        navigate(`/movie-recommendations/${movie.id}`);
+    }
+
     // TheMovieDB poster base URL
     const posterUrl = movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -70,6 +76,7 @@ function MovieCard({movie}){
                             <button type="button" className="action-btn" onClick={onWatchTrailerClick} title="Watch trailer" aria-label="Watch trailer">▶</button>
                             <button type="button" className="action-btn" onClick={onReviewsClick} title="Reviews & ratings" aria-label="Reviews & ratings">📝</button>
                             <button type="button" className="action-btn" onClick={onShareClick} title="Share movie" aria-label="Share movie">🔗</button>
+                            <button type="button" className="action-btn" onClick={onRecommendationsClick} title="Movie Recommendations" aria-label="Movie Recommendations">⭐</button>
                         </div>
                     </div>
                 </div>
