@@ -4,7 +4,7 @@ import {useMovies} from '../contexts/MovieContext.jsx'
 
 function MovieCard({movie}){
     const {favorites, addToFavorites, removeFromFavorites, isFavorite} = useMovies();
-    const favorite = isFavorite(movie.id); // This line remains unchanged
+    const favorite = isFavorite(movie.id); 
     const navigate = useNavigate();
     
     function onfavoriteClick(e){
