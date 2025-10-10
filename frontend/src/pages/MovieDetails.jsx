@@ -86,6 +86,9 @@ function MovieDetails() {
             <Link to={`/movie-reviews/${movie.id}`} style={{ textDecoration: "none" }}>
               <button className="details-btn">📝 Reviews & Ratings</button>
             </Link>
+            <Link to={`/movie-recommendations/${movie.id}`} style={{ textDecoration: "none" }}>
+              <button className="details-btn">🎯 Recommendations</button>
+            </Link>
             <button className="details-btn" onClick={onShareClick}>🔗 Share Movie</button>
           </div>
         </div>

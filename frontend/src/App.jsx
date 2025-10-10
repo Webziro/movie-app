@@ -9,7 +9,9 @@ import Favorite from './pages/Favorites.jsx';
 import MovieDetails from './pages/MovieDetails.jsx';
 import { MovieProvider } from './contexts/MovieContext.jsx';
 import Contact from './pages/contact.jsx';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from './contexts/AuthContext.jsx';
 import NavBar from './components/NavBar.jsx';
 import Logout from './pages/Logout.jsx';
 import WatchTrailer from './pages/WatchTrailer.jsx';
@@ -18,6 +20,16 @@ import WatchFullMovie from './pages/WatchFullMovie.jsx';
 import MovieRecommendations from './pages/MovieRecommendations.jsx';
 
 
+
+function ProtectedRoute({ children }) {
+  const { token } = useContext(AuthContext);
+  const location = useLocation();
+  const hasToken = Boolean(token || localStorage.getItem('authToken'));
+  if (!hasToken) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+  return children;
+}
 
 function App() {
 
@@ -39,7 +51,13 @@ function App() {
           <Route path='/watch-trailer/:id' element={<WatchTrailer/>}/>
           <Route path='/movie-reviews/:id' element={<MovieReviews/>}/>
           <Route path='/full-movies' element={<WatchFullMovie/>}/>
-          <Route path='/movie-recommendations/:id' element={<MovieRecommendations/>}/>
+          <Route path='/movie-recommendations/:id' element={
+            <ProtectedRoute>
+              <MovieRecommendations/>
+            </ProtectedRoute>
+          }/>
+          {/* Fallback: if no id is provided, redirect to login */}
+          <Route path='/movie-recommendations' element={<Navigate to='/login' replace />} />
         </Routes>
       </main>
     </MovieProvider>

@@ -1,40 +1,55 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMovieDetails } from "../services/api.js";
-import { useMovies } from "../contexts/MovieContext.jsx";
-import "../css/MovieCard.css";
-
+import MovieCard from "../components/MovieCard.jsx";
+import "../css/Home.css";
 import { fetchMovieRecommendations } from "../services/api.js";
 
 function MovieRecommendations() {
   const { id } = useParams();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getRecommendations = async () => {
-      const data = await fetchMovieRecommendations(id);
-      setRecommendations(data);
-      setLoading(false);
-    };
+    let isMounted = true;
+    async function getRecommendations() {
+      try {
+        const data = await fetchMovieRecommendations(id);
+        if (!isMounted) return;
+        const list = Array.isArray(data) ? data : [];
+        // Debug: surface what's being set
+        console.log('Recommendations fetched:', { id, count: list.length, sample: list[0] });
+        setRecommendations(list);
+      } catch (e) {
+        if (!isMounted) return;
+        setError("Failed to load recommendations");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
     getRecommendations();
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div style={{ padding: 16 }}>Loading recommendations...</div>;
 
   return (
-    <div>
-      <h2>Recommended Movies</h2>
-      <div className="movie-list">
+    <div className="home">
+      <div className="welcome-message" style={{ marginBottom: 12 }}>
+        <Link to={`/movie/${id}`} style={{ textDecoration: "none" }}>
+          <button>← Back to details</button>
+        </Link>
+      </div>
+      <h2 style={{ marginBottom: 16 }}>Recommended Movies</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {!error && recommendations.length === 0 && (
+        <p>No recommendations found for this movie.</p>
+      )}
+      <div className="movies-grid">
         {recommendations.map((movie) => (
-          <div key={movie.id} className="movie-card">
-            <Link to={`/movies/${movie.id}`}>
-              <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-              <h3>{movie.title}</h3>
-            </Link>
-          </div>
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </div>
@@ -42,4 +57,3 @@ function MovieRecommendations() {
 }
 
 export default MovieRecommendations;
-    const favorite = isFavorite(movie.id);

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import { API_BASE_URL } from '../config/api.js';
 import '../css/Login.css';
@@ -12,6 +12,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPath = location.state?.from?.pathname || '/home';
 
   //Handle login function
   const handleLogin = async (e) => {
@@ -27,7 +29,7 @@ function Login() {
       const data = await res.json();
       if (data.token) {
         login(data.token);
-        navigate('/home');
+        navigate(fromPath, { replace: true });
       } else {
         setError(data.message || 'Login failed');
       }
