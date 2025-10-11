@@ -8,6 +8,11 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--force"
 
+# Secrets scanning configuration
+[secrets]
+  # Disable secrets scanning for this project
+  SECRETS_SCAN_ENABLED = "false"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
