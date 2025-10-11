@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { API_BASE_URL } from "../config/api.js";
+import { API_BASE_URL } from "../config/api";
 import "../css/Register.css";
 import registerImage from "../images/register-img.jpg";
 
@@ -32,6 +32,21 @@ export default function App() {
     setApiError("");
     setSuccess(false);
 
+    // Validate username, email, and password
+    if (!values.username) {
+      setApiError("Username is required");
+      return;
+    }
+    if (!values.email) {
+      setApiError("Email is required");
+      return;
+    }
+    if (!values.password) {
+      setApiError("Password is required");
+      return;
+    }
+
+    // If all fields are valid, submit the form
     if (values.username && values.email && values.password) {
       setValid(true);
       setLoading(true);
@@ -60,6 +75,7 @@ export default function App() {
         setLoading(false);
       }
     } else {
+      setApiError("Please fill in all fields");
       setValid(false);
     }
   }; 
@@ -78,6 +94,15 @@ export default function App() {
               </div>
             )}
             {apiError && <div className="error-message">{apiError}</div>}
+            {submitted && !values.username && (
+              <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a username</span>
+            )}
+            {submitted && !values.email && (
+              <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter an email</span>
+            )}
+            {submitted && !values.password && (
+              <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a password</span>
+            )}
 
             <div className="form-group">
               <label htmlFor="username" className="form-label">Username</label>
@@ -91,9 +116,6 @@ export default function App() {
                 onChange={handleInputChange}
                 required
               />
-              {submitted && !values.username && (
-                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a username</span>
-              )}
             </div>
 
             <div className="form-group">
@@ -108,9 +130,6 @@ export default function App() {
                 onChange={handleInputChange}
                 required
               />
-              {submitted && !values.email && (
-                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter an email</span>
-              )}
             </div>
 
             <div className="form-group">
@@ -125,9 +144,6 @@ export default function App() {
                 onChange={handleInputChange}
                 required
               />
-              {submitted && !values.password && (
-                <span style={{ color: '#e74c3c', fontSize: '0.8rem' }}>Please enter a password</span>
-              )}
             </div>
 
             <button className="register-button" type="submit" disabled={loading}>
