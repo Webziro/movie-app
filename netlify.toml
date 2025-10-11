@@ -7,11 +7,8 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--force"
-
-# Secrets scanning configuration
-[secrets]
-  # Disable secrets scanning for this project
-  SECRETS_SCAN_ENABLED = "false"
+  # Omit build output from secrets scanning
+  SECRETS_SCAN_OMIT_PATHS = "frontend/dist/**"
 
 [[redirects]]
   from = "/api/*"
