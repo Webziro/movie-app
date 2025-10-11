@@ -15,7 +15,7 @@ function Login() {
   const location = useLocation();
   const fromPath = location.state?.from?.pathname || '/home';
 
-  //Handle login function
+  //This Handles login function
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
