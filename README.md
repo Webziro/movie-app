@@ -106,6 +106,8 @@ VITE_API_URL=http://localhost:3000/api
 VITE_TMDB_API_KEY=your-tmdb-api-key
 ```
 
+**Important**: Never commit your `.env` file to version control. The `.env` file is already included in `.gitignore`.
+
 ### Email Setup (Gmail)
 
 1. Enable 2-Factor Authentication on your Gmail account
