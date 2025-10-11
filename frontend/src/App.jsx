@@ -8,7 +8,7 @@ import Home from './pages/Home.jsx';
 import Favorite from './pages/Favorites.jsx';
 import MovieDetails from './pages/MovieDetails.jsx';
 import { MovieProvider } from './contexts/MovieContext.jsx';
-import Contact from './pages/contact.jsx';
+import Contact from './pages/Contact.jsx';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './contexts/AuthContext.jsx';
