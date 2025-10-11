@@ -51,7 +51,7 @@ export default function App() {
       setValid(true);
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/register`, {
+        const res = await fetch(`${API_BASE_URL}/api/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
