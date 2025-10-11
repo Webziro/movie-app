@@ -1,19 +1,22 @@
-[build]
-  base = "frontend"
-  command = "npm install && npm run build"
-  publish = "dist"
-  environment = { 
-    VITE_API_URL = "https://movie-app-n6iv.onrender.com",
-    VITE_TMDB_API_KEY = "52ec3563e14900d11681ced3bf093f1d"
-  }
+
+  [build]
+  command = "cd netlify/functions && npm install && cd ../../frontend && rm -rf node_modules package-lock.json && npm install && npm run build"
+  publish = "frontend/dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--force"
 
 [[redirects]]
   from = "/api/*"
-  to = "https://movie-app-n6iv.onrender.com/api/:splat"
+  to = "/.netlify/functions/:splat"
   status = 200
-  force = true
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+
+  
